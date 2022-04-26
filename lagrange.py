@@ -14,24 +14,24 @@ class Lagrange:
         # Function
         this function outputs new keys given the secret shares
         """
-        coefficents = []    # this will hold the coefficents to the function
-        keys = []           # this will hold the actual key pairs from the resulting functions
+        self.coefficents = []    # this will hold the coefficents to the function
+        self.keys = []           # this will hold the actual key pairs from the resulting functions
         
         # generate random coefficents for the function the range is quite trivial and I couldn't think of the ranges I could use
         for i in range (int(minimum_shares) - 1):
-            coefficents.append(random.randint(0, 9999))
+            self.coefficents.append(random.randint(0, 9999))
         
         # insert values for each share
         for key_generation in range (int(shares)):
             key_val = 0 # reset the key val when in the next share
 
             # function to generate the secret shares
-            for key, function_coefficients in enumerate (coefficents):
+            for key, function_coefficients in enumerate (self.coefficents):
                 key_val += function_coefficients * (key_generation + 1) ** key
             
             # append a key-val pair where the key is the share number where the val is the secret value for the share
-            keys.append((key_generation + 1, key_val))
-        return (keys)
+            self.keys.append((key_generation + 1, key_val))
+        return (self.keys)
 
     def encrypt(self, message, minimum_shares, share_number):
         """
@@ -44,6 +44,7 @@ class Lagrange:
         # Function
         this function outputs coordinate pairs (the secret shares) that can be handed out to the end user
         """
+        
         pass
 
     def decrypt(self, minimum_shares, shares):
@@ -94,6 +95,41 @@ def main():
             minimum_shares, shares, share_number
         )
         print(new_shares)
+    
+    continuing = input("Do you want to continue, y for yes and n for no? ")
+    while continuing == "y":
+            choice = input("Do you want to encrypt or decrypt a secret or generate new shares (e/d/g)?")
+
+            if choice == "e":
+                message = input("What is the secret you wish to encrypt?")
+                minimum_shares = input(
+                    "What is the minimum number of shares you wish to deploy?"
+                )
+                share_number = input(
+                    "What is the minimum number of shares you wish to generate?"
+                )
+                encryption = interpolation.encrypt(message, minimum_shares, share_number)
+                print(encryption)
+
+            elif choice == "d":
+                minimum_shares = input(
+                    "What is the minimum number of shares you need to decrypt?"
+                )
+                shares = input("What shares do you have?")
+                decryption = interpolation.decrypt(minimum_shares, shares)
+                print(decryption)
+
+            elif choice == "g":
+                minimum_shares = input(
+                    "What is the minimum number of shares you need to decrypt?"
+                )
+                shares = input("What shares do you have?")
+                share_number = input("What is the number of new shares you want to generate?")
+                new_shares = interpolation.generate_new_shares(
+                    minimum_shares, shares, share_number
+                )
+                print(new_shares)
+            continuing = input("Do you want to continue, y for yes and n for no? ")
 
 
 if __name__ == "__main__":
