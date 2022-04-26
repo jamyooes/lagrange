@@ -1,3 +1,4 @@
+import random
 class Lagrange:
     def __init__(self):
         pass
@@ -13,7 +14,24 @@ class Lagrange:
         # Function
         this function outputs new keys given the secret shares
         """
-        pass
+        coefficents = []    # this will hold the coefficents to the function
+        keys = []           # this will hold the actual key pairs from the resulting functions
+        
+        # generate random coefficents for the function the range is quite trivial and I couldn't think of the ranges I could use
+        for i in range (int(minimum_shares) - 1):
+            coefficents.append(random.randint(0, 9999))
+        
+        # insert values for each share
+        for key_generation in range (int(shares)):
+            key_val = 0 # reset the key val when in the next share
+
+            # function to generate the secret shares
+            for key, function_coefficients in enumerate (coefficents):
+                key_val += function_coefficients * (key_generation + 1) ** key
+            
+            # append a key-val pair where the key is the share number where the val is the secret value for the share
+            keys.append((key_generation + 1, key_val))
+        return (keys)
 
     def encrypt(self, message, minimum_shares, share_number):
         """
