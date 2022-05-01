@@ -1,3 +1,6 @@
+"""
+James Yoo
+"""
 import random
 class Lagrange:
     def __init__(self):
